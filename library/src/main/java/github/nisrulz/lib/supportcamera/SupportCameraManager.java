@@ -19,44 +19,12 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class CameraManager {
+public class SupportCameraManager {
 
     private Camera camera;
     private PictureCapturedListener pictureCapturedListener;
     private Activity activity;
     private Context context;
-
-
-    public CameraManager(Activity activity) {
-        this.activity = activity;
-        context = activity.getApplicationContext();
-    }
-
-    public void init(PictureCapturedListener pictureCapturedListener, FrameLayout previewLayout) {
-        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        this.pictureCapturedListener = pictureCapturedListener;
-        camera = checkDeviceCamera();
-
-        ImageSurfaceView imageSurfaceView = new ImageSurfaceView(activity, context, camera);
-        previewLayout.addView(imageSurfaceView);
-
-    }
-
-    private Camera checkDeviceCamera() {
-        Camera mCamera = null;
-        try {
-            mCamera = Camera.open();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return mCamera;
-    }
-
-    public void takePicture() {
-        camera.takePicture(null, null, pictureCallback);
-    }
-
-
     private Camera.PictureCallback pictureCallback = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
@@ -87,12 +55,40 @@ public class CameraManager {
                 }
 
 
-
                 pictureCapturedListener.onPictureCaptured(bm);
             }
             camera.startPreview();
         }
     };
+
+    public SupportCameraManager(Activity activity) {
+        this.activity = activity;
+        context = activity.getApplicationContext();
+    }
+
+    public void init(PictureCapturedListener pictureCapturedListener, FrameLayout previewLayout) {
+        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        this.pictureCapturedListener = pictureCapturedListener;
+        camera = checkDeviceCamera();
+
+        ImageSurfaceView imageSurfaceView = new ImageSurfaceView(activity, context, camera);
+        previewLayout.addView(imageSurfaceView);
+
+    }
+
+    private Camera checkDeviceCamera() {
+        Camera mCamera = null;
+        try {
+            mCamera = Camera.open();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return mCamera;
+    }
+
+    public void takePicture() {
+        camera.takePicture(null, null, pictureCallback);
+    }
 
     public String storeImage(Bitmap image) {
         File pictureFile = getOutputMediaFile();
