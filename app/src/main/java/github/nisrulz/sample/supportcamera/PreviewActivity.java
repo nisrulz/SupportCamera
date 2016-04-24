@@ -26,28 +26,32 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import github.nisrulz.lib.supportcamera.SupportCameraManager;
+import github.nisrulz.lib.supportcamera.CameraAPI;
 import github.nisrulz.lib.supportcamera.PictureCapturedListener;
+import github.nisrulz.lib.supportcamera.SupportCameraManager;
 
 public class PreviewActivity extends AppCompatActivity {
 
     private FrameLayout cameraPreviewLayout;
+    CameraAPI cameraAPI;
     SupportCameraManager supportCameraManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 0);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager
+                .LayoutParams.FLAG_FULLSCREEN);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preview);
 
         cameraPreviewLayout = (FrameLayout) findViewById(R.id.camera_preview);
+        supportCameraManager = new SupportCameraManager();
 
-        supportCameraManager = new SupportCameraManager(this);
-        supportCameraManager.init(new PictureCapturedListener() {
+        cameraAPI = new CameraAPI(this);
+        cameraAPI.init(new PictureCapturedListener() {
             @Override
             public void onPictureCaptured(Bitmap bitmap) {
-                String imagePath = supportCameraManager.storeImage(bitmap);
+                String imagePath = supportCameraManager.storeImage(PreviewActivity.this, bitmap);
                 Intent intent = new Intent(PreviewActivity.this, MainActivity.class);
                 if (imagePath != null) {
                     intent.putExtra("bmp", imagePath);
@@ -64,7 +68,7 @@ public class PreviewActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                supportCameraManager.takePicture();
+                cameraAPI.takePicture();
             }
         });
     }

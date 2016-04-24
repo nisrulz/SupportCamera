@@ -17,16 +17,8 @@
 package github.nisrulz.lib.supportcamera;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.hardware.Camera;
 import android.os.Environment;
-import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -37,77 +29,13 @@ import java.util.Date;
 
 public class SupportCameraManager {
 
-    private Camera camera;
-    private PictureCapturedListener pictureCapturedListener;
-    private Activity activity;
-    private Context context;
-    private Camera.PictureCallback pictureCallback = new Camera.PictureCallback() {
-        @Override
-        public void onPictureTaken(byte[] data, Camera camera) {
-            if (data != null) {
-                int screenWidth = context.getResources().getDisplayMetrics().widthPixels;
-                int screenHeight = context.getResources().getDisplayMetrics().heightPixels;
-                Bitmap bm = BitmapFactory.decodeByteArray(data, 0, (data != null) ? data.length : 0);
 
-                if (bm == null) {
-                    Toast.makeText(context, "Captured image is empty", Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-                if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                    // Notice that width and height are reversed
-                    Bitmap scaled = Bitmap.createScaledBitmap(bm, screenHeight, screenWidth, true);
-                    int w = scaled.getWidth();
-                    int h = scaled.getHeight();
-                    // Setting post rotate to 90
-                    Matrix mtx = new Matrix();
-                    mtx.postRotate(90);
-                    // Rotating Bitmap
-                    bm = Bitmap.createBitmap(scaled, 0, 0, w, h, mtx, true);
-                } else {// LANDSCAPE MODE
-                    //No need to reverse width and height
-                    Bitmap scaled = Bitmap.createScaledBitmap(bm, screenWidth, screenHeight, true);
-                    bm = scaled;
-                }
-
-
-                pictureCapturedListener.onPictureCaptured(bm);
-            }
-            camera.startPreview();
-        }
-    };
-
-    public SupportCameraManager(Activity activity) {
-        this.activity = activity;
-        context = activity.getApplicationContext();
-    }
-
-    public void init(PictureCapturedListener pictureCapturedListener, FrameLayout previewLayout) {
-        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        this.pictureCapturedListener = pictureCapturedListener;
-        camera = checkDeviceCamera();
-
-        ImageSurfaceView imageSurfaceView = new ImageSurfaceView(activity, context, camera);
-        previewLayout.addView(imageSurfaceView);
+    public SupportCameraManager() {
 
     }
 
-    private Camera checkDeviceCamera() {
-        Camera mCamera = null;
-        try {
-            mCamera = Camera.open();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return mCamera;
-    }
-
-    public void takePicture() {
-        camera.takePicture(null, null, pictureCallback);
-    }
-
-    public String storeImage(Bitmap image) {
-        File pictureFile = getOutputMediaFile();
+    public String storeImage(Activity activity, Bitmap image) {
+        File pictureFile = getOutputMediaFile(activity);
         if (pictureFile == null) {
             System.out.println(
                     "Error creating media file, check storage permissions: ");
@@ -131,7 +59,7 @@ public class SupportCameraManager {
     /**
      * Create a File for saving an image or video
      */
-    private File getOutputMediaFile() {
+    private File getOutputMediaFile(Activity activity) {
         // To be safe, you should check that the SDCard is mounted
         // using Environment.getExternalStorageState() before doing this.
         File mediaStorageDir = new File(Environment.getExternalStorageDirectory()
@@ -155,6 +83,4 @@ public class SupportCameraManager {
         mediaFile = new File(mediaStorageDir.getPath() + File.separator + mImageName);
         return mediaFile;
     }
-
-
 }

@@ -43,11 +43,11 @@ public class ImageSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     public void surfaceCreated(SurfaceHolder holder) {
         try {
 
-            this.camera.setPreviewDisplay(holder);
+            camera.setPreviewDisplay(holder);
             setCameraDisplayOrientation(activity, Camera.CameraInfo
                             .CAMERA_FACING_BACK,
                     camera);
-            this.camera.startPreview();
+            camera.startPreview();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -60,8 +60,8 @@ public class ImageSurfaceView extends SurfaceView implements SurfaceHolder.Callb
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        this.camera.stopPreview();
-        this.camera.release();
+        camera.stopPreview();
+        camera.release();
     }
 
     public static void setCameraDisplayOrientation(Activity activity, int cameraId, Camera camera) {
