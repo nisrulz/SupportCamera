@@ -21,7 +21,6 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
@@ -77,15 +76,18 @@ public class Camera2API {
     }
 
     private Activity activity;
+    private Context context;
     private PictureCapturedListener pictureCapturedListener;
 
     public Camera2API(Activity activity) {
+
         this.activity = activity;
+        this.context = activity;
     }
 
     public void init(FrameLayout previewLayout, PictureCapturedListener pictureCapturedListener) {
         mFile = new File(activity.getExternalFilesDir(null), "pic.jpg");
-        mTextureView = new AutoFitTextureView(activity);
+        mTextureView = new TextureView(context);
         this.pictureCapturedListener = pictureCapturedListener;
 
         previewLayout.addView(mTextureView);
@@ -171,10 +173,7 @@ public class Camera2API {
      */
     private String mCameraId;
 
-    /**
-     * An {@link AutoFitTextureView} for camera preview.
-     */
-    private AutoFitTextureView mTextureView;
+    private TextureView mTextureView;
 
     /**
      * A {@link CameraCaptureSession } for camera preview.
@@ -485,13 +484,13 @@ public class Camera2API {
 
                 // We fit the aspect ratio of TextureView to the size of preview we picked.
                 int orientation = activity.getResources().getConfiguration().orientation;
-                if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                    mTextureView.setAspectRatio(
-                            mPreviewSize.getWidth(), mPreviewSize.getHeight());
-                } else {
-                    mTextureView.setAspectRatio(
-                            mPreviewSize.getHeight(), mPreviewSize.getWidth());
-                }
+//                if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//                    mTextureView.setAspectRatio(
+//                            mPreviewSize.getWidth(), mPreviewSize.getHeight());
+//                } else {
+//                    mTextureView.setAspectRatio(
+//                            mPreviewSize.getHeight(), mPreviewSize.getWidth());
+//                }
 
                 // Check if the flash is supported.
                 Boolean available = characteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE);
