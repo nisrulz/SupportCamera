@@ -26,20 +26,13 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import github.nisrulz.lib.supportcamera.AutoFitTextureView;
-import github.nisrulz.lib.supportcamera.Camera2API;
-import github.nisrulz.lib.supportcamera.CameraAPI;
 import github.nisrulz.lib.supportcamera.PictureCapturedListener;
 import github.nisrulz.lib.supportcamera.SupportCameraManager;
 
 public class PreviewActivity extends AppCompatActivity {
 
     private FrameLayout cameraPreviewLayout;
-    CameraAPI cameraAPI;
-    SupportCameraManager supportCameraManager;
 
-    AutoFitTextureView autoFitTextureView;
-    Camera2API camera2API;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,24 +42,15 @@ public class PreviewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preview);
 
-        supportCameraManager = new SupportCameraManager();
-
-
         cameraPreviewLayout = (FrameLayout) findViewById(R.id.camera_preview);
 
-        camera2API = new Camera2API(this);
-        camera2API.init(cameraPreviewLayout, pictureCapturedListener);
-
-//        cameraAPI = new CameraAPI(this);
-//        cameraAPI.init(cameraPreviewLayout, pictureCapturedListener);
-
+        SupportCameraManager.getInstance().init(this, cameraPreviewLayout, pictureCapturedListener);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_take_pic);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                cameraAPI.takePicture();
-                camera2API.takePicture();
+                SupportCameraManager.getInstance().takePicture();
             }
         });
     }
@@ -74,7 +58,7 @@ public class PreviewActivity extends AppCompatActivity {
     PictureCapturedListener pictureCapturedListener = new PictureCapturedListener() {
         @Override
         public void onPictureCaptured(Bitmap bitmap) {
-            String imagePath = supportCameraManager.storeImage(PreviewActivity.this, bitmap);
+            String imagePath = SupportCameraManager.getInstance().storeImage(PreviewActivity.this, bitmap);
             Intent intent = new Intent(PreviewActivity.this, MainActivity.class);
             if (imagePath != null) {
                 intent.putExtra("bmp", imagePath);

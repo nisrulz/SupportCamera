@@ -18,7 +18,10 @@ package github.nisrulz.lib.supportcamera;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Environment;
+import android.util.Log;
+import android.widget.FrameLayout;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -30,8 +33,49 @@ import java.util.Date;
 public class SupportCameraManager {
 
 
-    public SupportCameraManager() {
+    private CameraAPI cameraAPI;
+    private Camera2API camera2API;
+    private static SupportCameraManager INSTANCE;
 
+
+    private SupportCameraManager() {
+
+    }
+
+    public static SupportCameraManager getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new SupportCameraManager();
+        }
+        return INSTANCE;
+    }
+
+    public void init(Activity activity, FrameLayout cameraPreviewLayout, PictureCapturedListener pictureCapturedListener) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            camera2API = new Camera2API(activity);
+            camera2API.init(cameraPreviewLayout, pictureCapturedListener);
+
+            Log.d("TAG", "Camera API 2 Loaded !");
+        } else {
+            cameraAPI = new CameraAPI(activity);
+            cameraAPI.init(cameraPreviewLayout, pictureCapturedListener);
+
+
+            Log.d("TAG", "Camera API 1 Loaded !");
+        }
+
+    }
+
+    public void takePicture() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            camera2API.takePicture();
+
+            Log.d("TAG", "Camera API 2 used to take picture !");
+        } else {
+            cameraAPI.takePicture();
+
+
+            Log.d("TAG", "Camera API 1 used to take picture !");
+        }
     }
 
     public String storeImage(Activity activity, Bitmap image) {
