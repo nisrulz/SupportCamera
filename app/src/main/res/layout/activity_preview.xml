@@ -20,18 +20,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!--<FrameLayout-->
-    <!--android:id="@+id/camera_preview"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_alignParentTop="true">-->
-    <!--</FrameLayout>-->
+    <FrameLayout
+    android:id="@+id/camera_preview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentTop="true">
+    </FrameLayout>
 
-    <github.nisrulz.lib.supportcamera.AutoFitTextureView
-        android:id="@+id/camera_preview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"/>
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_take_pic"
         android:layout_width="wrap_content"

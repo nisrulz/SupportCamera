@@ -52,12 +52,11 @@ public class PreviewActivity extends AppCompatActivity {
         supportCameraManager = new SupportCameraManager();
 
 
-        autoFitTextureView = (AutoFitTextureView) findViewById(R.id.camera_preview);
+        cameraPreviewLayout = (FrameLayout) findViewById(R.id.camera_preview);
+
         camera2API = new Camera2API(this);
-        camera2API.init(autoFitTextureView, pictureCapturedListener);
+        camera2API.init(cameraPreviewLayout, pictureCapturedListener);
 
-
-//        cameraPreviewLayout = (FrameLayout) findViewById(R.id.camera_preview);
 //        cameraAPI = new CameraAPI(this);
 //        cameraAPI.init(cameraPreviewLayout, pictureCapturedListener);
 

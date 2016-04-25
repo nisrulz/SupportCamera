@@ -49,6 +49,7 @@ import android.util.Size;
 import android.util.SparseIntArray;
 import android.view.Surface;
 import android.view.TextureView;
+import android.widget.FrameLayout;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -82,10 +83,12 @@ public class Camera2API {
         this.activity = activity;
     }
 
-    public void init(AutoFitTextureView autoFitTextureView, PictureCapturedListener pictureCapturedListener) {
+    public void init(FrameLayout previewLayout, PictureCapturedListener pictureCapturedListener) {
         mFile = new File(activity.getExternalFilesDir(null), "pic.jpg");
-        mTextureView = autoFitTextureView;
+        mTextureView = new AutoFitTextureView(activity);
         this.pictureCapturedListener = pictureCapturedListener;
+
+        previewLayout.addView(mTextureView);
 
         startBackgroundThread();
 

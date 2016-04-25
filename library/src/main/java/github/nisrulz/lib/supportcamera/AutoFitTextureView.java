@@ -16,13 +16,16 @@
 
 package github.nisrulz.lib.supportcamera;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.TextureView;
 
 /**
  * A {@link TextureView} that can be adjusted to a specified aspect ratio.
  */
+@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class AutoFitTextureView extends TextureView {
 
     private int mRatioWidth = 0;
