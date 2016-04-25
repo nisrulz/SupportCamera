@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         capturedImageHolder = (ImageView) findViewById(R.id.captured_image);
         capturedImageHolder.setImageURI(imageUri);
 
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

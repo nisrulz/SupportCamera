@@ -26,6 +26,8 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import github.nisrulz.lib.supportcamera.AutoFitTextureView;
+import github.nisrulz.lib.supportcamera.Camera2API;
 import github.nisrulz.lib.supportcamera.CameraAPI;
 import github.nisrulz.lib.supportcamera.PictureCapturedListener;
 import github.nisrulz.lib.supportcamera.SupportCameraManager;
@@ -36,6 +38,9 @@ public class PreviewActivity extends AppCompatActivity {
     CameraAPI cameraAPI;
     SupportCameraManager supportCameraManager;
 
+    AutoFitTextureView autoFitTextureView;
+    Camera2API camera2API;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager
@@ -44,32 +49,41 @@ public class PreviewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preview);
 
-        cameraPreviewLayout = (FrameLayout) findViewById(R.id.camera_preview);
         supportCameraManager = new SupportCameraManager();
 
-        cameraAPI = new CameraAPI(this);
-        cameraAPI.init(new PictureCapturedListener() {
-            @Override
-            public void onPictureCaptured(Bitmap bitmap) {
-                String imagePath = supportCameraManager.storeImage(PreviewActivity.this, bitmap);
-                Intent intent = new Intent(PreviewActivity.this, MainActivity.class);
-                if (imagePath != null) {
-                    intent.putExtra("bmp", imagePath);
-                    startActivity(intent);
-                    finish();
-                } else {
-                    Toast.makeText(PreviewActivity.this, "Error!", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }, cameraPreviewLayout);
+
+        autoFitTextureView = (AutoFitTextureView) findViewById(R.id.camera_preview);
+        camera2API = new Camera2API(this);
+        camera2API.init(autoFitTextureView, pictureCapturedListener);
+
+
+//        cameraPreviewLayout = (FrameLayout) findViewById(R.id.camera_preview);
+//        cameraAPI = new CameraAPI(this);
+//        cameraAPI.init(cameraPreviewLayout, pictureCapturedListener);
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_take_pic);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                cameraAPI.takePicture();
+//                cameraAPI.takePicture();
+                camera2API.takePicture();
             }
         });
     }
+
+    PictureCapturedListener pictureCapturedListener = new PictureCapturedListener() {
+        @Override
+        public void onPictureCaptured(Bitmap bitmap) {
+            String imagePath = supportCameraManager.storeImage(PreviewActivity.this, bitmap);
+            Intent intent = new Intent(PreviewActivity.this, MainActivity.class);
+            if (imagePath != null) {
+                intent.putExtra("bmp", imagePath);
+                startActivity(intent);
+                finish();
+            } else {
+                Toast.makeText(PreviewActivity.this, "Error!", Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
 }

@@ -74,7 +74,7 @@ public class CameraAPI {
         context = activity.getApplicationContext();
     }
 
-    public void init(PictureCapturedListener pictureCapturedListener, FrameLayout previewLayout) {
+    public void init(FrameLayout previewLayout, PictureCapturedListener pictureCapturedListener) {
         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         this.pictureCapturedListener = pictureCapturedListener;
         camera = checkDeviceCamera();

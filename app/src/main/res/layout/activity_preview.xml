@@ -18,21 +18,27 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
->
-    <FrameLayout
+    android:layout_height="match_parent">
+
+    <!--<FrameLayout-->
+    <!--android:id="@+id/camera_preview"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_alignParentTop="true">-->
+    <!--</FrameLayout>-->
+
+    <github.nisrulz.lib.supportcamera.AutoFitTextureView
         android:id="@+id/camera_preview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true">
-    </FrameLayout>
+        android:layout_alignParentTop="true"/>
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_take_pic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_gravity="center_horizontal|bottom"
-        android:src="@android:drawable/ic_menu_camera" android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"/>
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal|bottom" android:layout_marginBottom="16dp"
+        android:src="@android:drawable/ic_menu_camera"/>
 
 </RelativeLayout>
