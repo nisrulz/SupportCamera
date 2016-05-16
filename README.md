@@ -1,6 +1,9 @@
 # Support Library for Camera API in android   
 Support library to handle camera api on all android versions 
 
+
+[![Twitter](https://img.shields.io/badge/Twitter-@nisrulz-blue.svg?style=flat)](http://twitter.com/nisrulz)
+
 License
 =======
 
