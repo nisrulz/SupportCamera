@@ -29,72 +29,70 @@ import android.widget.Toast;
 
 public class CameraAPI {
 
-    private Camera camera;
-    private PictureCapturedListener pictureCapturedListener;
-    private Activity activity;
-    private Context context;
-    private Camera.PictureCallback pictureCallback = new Camera.PictureCallback() {
-        @Override
-        public void onPictureTaken(byte[] data, Camera camera) {
-            if (data != null) {
-                int screenWidth = context.getResources().getDisplayMetrics().widthPixels;
-                int screenHeight = context.getResources().getDisplayMetrics().heightPixels;
-                Bitmap bm = BitmapFactory.decodeByteArray(data, 0, (data != null) ? data.length : 0);
+  private Camera camera;
+  private PictureCapturedListener pictureCapturedListener;
+  private Activity activity;
+  private Context context;
+  private Camera.PictureCallback pictureCallback = new Camera.PictureCallback() {
+    @Override public void onPictureTaken(byte[] data, Camera camera) {
+      if (data != null) {
+        int screenWidth = context.getResources().getDisplayMetrics().widthPixels;
+        int screenHeight = context.getResources().getDisplayMetrics().heightPixels;
+        Bitmap bm = BitmapFactory.decodeByteArray(data, 0, (data != null) ? data.length : 0);
 
-                if (bm == null) {
-                    Toast.makeText(context, "Captured image is empty", Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-                if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                    // Notice that width and height are reversed
-                    Bitmap scaled = Bitmap.createScaledBitmap(bm, screenHeight, screenWidth, true);
-                    int w = scaled.getWidth();
-                    int h = scaled.getHeight();
-                    // Setting post rotate to 90
-                    Matrix mtx = new Matrix();
-                    mtx.postRotate(90);
-                    // Rotating Bitmap
-                    bm = Bitmap.createBitmap(scaled, 0, 0, w, h, mtx, true);
-                } else {// LANDSCAPE MODE
-                    //No need to reverse width and height
-                    Bitmap scaled = Bitmap.createScaledBitmap(bm, screenWidth, screenHeight, true);
-                    bm = scaled;
-                }
-
-
-                pictureCapturedListener.onPictureCaptured(bm);
-            }
-            camera.startPreview();
+        if (bm == null) {
+          Toast.makeText(context, "Captured image is empty", Toast.LENGTH_LONG).show();
+          return;
         }
-    };
 
-    public CameraAPI(Activity activity) {
-        this.activity = activity;
-        context = activity.getApplicationContext();
-    }
-
-    public void init(FrameLayout previewLayout, PictureCapturedListener pictureCapturedListener) {
-        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        this.pictureCapturedListener = pictureCapturedListener;
-        camera = checkDeviceCamera();
-
-        ImageSurfaceView imageSurfaceView = new ImageSurfaceView(activity, context, camera);
-        previewLayout.addView(imageSurfaceView);
-
-    }
-
-    private Camera checkDeviceCamera() {
-        Camera mCamera = null;
-        try {
-            mCamera = Camera.open();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (context.getResources().getConfiguration().orientation
+            == Configuration.ORIENTATION_PORTRAIT) {
+          // Notice that width and height are reversed
+          Bitmap scaled = Bitmap.createScaledBitmap(bm, screenHeight, screenWidth, true);
+          int w = scaled.getWidth();
+          int h = scaled.getHeight();
+          // Setting post rotate to 90
+          Matrix mtx = new Matrix();
+          mtx.postRotate(90);
+          // Rotating Bitmap
+          bm = Bitmap.createBitmap(scaled, 0, 0, w, h, mtx, true);
+        } else {// LANDSCAPE MODE
+          //No need to reverse width and height
+          Bitmap scaled = Bitmap.createScaledBitmap(bm, screenWidth, screenHeight, true);
+          bm = scaled;
         }
-        return mCamera;
-    }
 
-    public void takePicture() {
-        camera.takePicture(null, null, pictureCallback);
+        pictureCapturedListener.onPictureCaptured(bm);
+      }
+      camera.startPreview();
     }
+  };
+
+  public CameraAPI(Activity activity) {
+    this.activity = activity;
+    context = activity.getApplicationContext();
+  }
+
+  public void init(FrameLayout previewLayout, PictureCapturedListener pictureCapturedListener) {
+    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    this.pictureCapturedListener = pictureCapturedListener;
+    camera = checkDeviceCamera();
+
+    ImageSurfaceView imageSurfaceView = new ImageSurfaceView(activity, context, camera);
+    previewLayout.addView(imageSurfaceView);
+  }
+
+  private Camera checkDeviceCamera() {
+    Camera mCamera = null;
+    try {
+      mCamera = Camera.open();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return mCamera;
+  }
+
+  public void takePicture() {
+    camera.takePicture(null, null, pictureCallback);
+  }
 }

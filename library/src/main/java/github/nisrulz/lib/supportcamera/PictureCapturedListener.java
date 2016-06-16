@@ -20,5 +20,5 @@ import android.graphics.Bitmap;
 
 public interface PictureCapturedListener {
 
-    void onPictureCaptured(Bitmap bitmap);
+  void onPictureCaptured(Bitmap bitmap);
 }
